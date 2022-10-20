@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Save_Appointment</name>
+        <label>Save Appointment</label>
+        <locationX>176</locationX>
+        <locationY>158</locationY>
+        <actionName>saveAppointment</actionName>
+        <actionType>saveAppointment</actionType>
+        <faultConnector>
+            <targetReference>set_error_text</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>optionalServiceResourceId</name>
+            <value>
+                <elementReference>inOptionalAttendees</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>selectedTimezone</name>
+            <value>
+                <elementReference>inSelectedTimezone</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>serviceAppointmentFields</name>
+            <value>
+                <elementReference>formulaServiceAppointmentFields</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>serviceResources</name>
+            <value>
+                <elementReference>inServiceResources</elementReference>
+            </value>
+        </inputParameters>
+        <outputParameters>
+            <assignToReference>outErrorMessage</assignToReference>
+            <name>errorMessage</name>
+        </outputParameters>
+        <outputParameters>
+            <assignToReference>outServiceAppointmentId</assignToReference>
+            <name>serviceAppointmentId</name>
+        </outputParameters>
+    </actionCalls>
+    <apiVersion>56.0</apiVersion>
+    <assignments>
+        <name>set_error_text</name>
+        <label>set error text</label>
+        <locationX>440</locationX>
+        <locationY>278</locationY>
+        <assignmentItems>
+            <assignToReference>outErrorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>error during Save action</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <formulas>
+        <name>formulaServiceAppointmentFields</name>
+        <dataType>String</dataType>
+        <expression>&apos;{&quot;Description&quot;:&quot;&apos; &amp;{!inServiceAppointment.Description}&amp; 
+&apos;&quot;,&apos;&amp; &apos;&quot;SchedStartTime&quot;:&quot;&apos; &amp; substitute(substitute(text({!inServiceAppointment.SchedStartTime}),&apos; &apos;,&apos;T&apos;),&apos;Z&apos;,&apos;.000Z&apos;)&amp;
+&apos;&quot;,&apos;&amp; &apos;&quot;SchedEndTime&quot;:&quot;&apos; &amp; substitute(substitute(text({!inServiceAppointment.SchedEndTime}),&apos; &apos;,&apos;T&apos;),&apos;Z&apos;,&apos;.000Z&apos;)&amp;
+&apos;&quot;,&apos;&amp; &apos;&quot;ArrivalWindowStartTime&quot;:&quot;&apos; &amp; substitute(substitute(text({!inServiceAppointment.ArrivalWindowStartTime}),&apos; &apos;,&apos;T&apos;),&apos;Z&apos;,&apos;.000Z&apos;)&amp;
+&apos;&quot;,&apos;&amp; &apos;&quot;ArrivalWindowEndTime&quot;:&quot;&apos; &amp; substitute(substitute(text({!inServiceAppointment.ArrivalWindowEndTime}),&apos; &apos;,&apos;T&apos;),&apos;Z&apos;,&apos;.000Z&apos;)&amp;
+&apos;&quot;,&apos;&amp; &apos;&quot;Subject&quot;:&quot;&apos; &amp; {!inServiceAppointment.Subject}&amp;
+&apos;&quot;,&apos;&amp; &apos;&quot;AdditionalInformation&quot;:&quot;&apos; &amp; {!inServiceAppointment.AdditionalInformation}&amp;
+&apos;&quot;,&apos;&amp; &apos;&quot;AppointmentType&quot;:&quot;&apos; &amp; text({!inServiceAppointment.AppointmentType})&amp;
+&apos;&quot;,&apos;&amp; &apos;&quot;Comments&quot;:&quot;&apos; &amp; {!inServiceAppointment.Comments}&amp;
+&apos;&quot;,&apos;&amp; &apos;&quot;ParentRecordId&quot;:&quot;&apos; &amp; {!inServiceAppointment.ParentRecordId}&amp;
+&apos;&quot;,&apos;&amp; &apos;&quot;Street&quot;:&quot;&apos; &amp; {!inServiceAppointment.Street}&amp;
+&apos;&quot;,&apos;&amp; &apos;&quot;City&quot;:&quot;&apos; &amp; {!inServiceAppointment.City}&amp;
+&apos;&quot;,&apos;&amp; &apos;&quot;State&quot;:&quot;&apos; &amp; {!inServiceAppointment.State}&amp;
+&apos;&quot;,&apos;&amp; &apos;&quot;PostalCode&quot;:&quot;&apos; &amp; {!inServiceAppointment.PostalCode}&amp;
+&apos;&quot;,&apos;&amp; &apos;&quot;Country&quot;:&quot;&apos; &amp; {!inServiceAppointment.Country}&amp;
+&apos;&quot;,&apos;&amp; &apos;&quot;WorkTypeGroupId&quot;:&quot;&apos; &amp; {!inWorkTypeGroupId}&amp;
+&apos;&quot;,&apos;&amp; &apos;&quot;ServiceTerritoryId&quot;:&quot;&apos; &amp; {!inServiceAppointment.ServiceTerritoryId}&amp;
+&apos;&quot;,&apos;&amp; &apos;&quot;ServiceResourceId&quot;:&quot;&apos; &amp; {!inServiceResourceId}&amp;
+&apos;&quot;,&apos;&amp; &apos;&quot;Phone&quot;:&quot;&apos; &amp; {!inServiceAppointment.Phone}&amp;
+&apos;&quot;,&apos;&amp; &apos;&quot;Email&quot;:&quot;&apos; &amp; {!inServiceAppointment.Email}&amp;
+&apos;&quot;,&apos;&amp; &apos;&quot;IsAnonymousBooking&quot;:&quot;&apos; &amp; if({!inServiceAppointment.IsAnonymousBooking},&quot;True&quot;,&quot;False&quot;)&amp;
+&apos;&quot;,&apos;&amp; &apos;&quot;isSlotChanged&quot;:&quot;&apos; &amp; &quot;False&quot;&amp;
+&apos;&quot;,&apos;&amp; &apos;&quot;Status&quot;:&quot;&apos; &amp; &quot;Scheduled&quot;&amp;
+&apos;&quot;}&apos;</expression>
+    </formulas>
+    <interviewLabel>LX Service Appointment Helper flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>LX Service Appointment Helper flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Save_Appointment</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>inOptionalAttendees</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>inSelectedTimezone</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>inServiceAppointment</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>ServiceAppointment</objectType>
+    </variables>
+    <variables>
+        <name>inServiceAppointmentFields</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>inServiceResourceId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>inServiceResources</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>inWorkTypeGroupId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>outErrorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <name>outServiceAppointmentId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+</Flow>
